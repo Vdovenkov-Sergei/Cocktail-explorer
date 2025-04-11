@@ -1,9 +1,9 @@
 const cocktailList = document.querySelector('.cocktail-list');
-const searchInput = document.getElementById('search-input');
-const searchButton = document.getElementById('search-btn');
-const clearButton = document.getElementById('clear-btn');
-const resultCount = document.getElementById('result-count');
-const idleAnimation = document.getElementById('idle-animation');
+const searchInput = document.querySelector('#search-input');
+const searchButton = document.querySelector('#search-btn');
+const clearButton = document.querySelector('#clear-btn');
+const resultCount = document.querySelector('#result-count');
+const idleAnimation = document.querySelector('#idle-animation');
 
 const API_URL = 'https://www.thecocktaildb.com/api/json/v1/1/';
 
