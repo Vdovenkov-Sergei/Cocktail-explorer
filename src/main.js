@@ -36,7 +36,6 @@ function displayCocktails(cocktails) {
     resultCount.textContent = `${cocktails.length} cocktails found.`;
     showIdleAnimation(false);
 
-    const isMobile = window.innerWidth <= 768;
     cocktails.forEach(cocktail => {
         const card = document.createElement('article');
         card.classList.add('cocktail-card');
@@ -45,34 +44,14 @@ function displayCocktails(cocktails) {
             <img src="${cocktail.strDrinkThumb}/small" alt="${cocktail.strDrink}">
             <h3>${cocktail.strDrink}</h3>
             <p>${cocktail.strCategory}</p>
-            <button class="view-details-btn" data-id="${cocktail.idDrink}" hidden>View More</button>
         `;
-
-        const viewBtn = card.querySelector('.view-details-btn');
-
-        if (!isMobile) {
-            card.addEventListener('mouseenter', () => {
-                viewBtn.hidden = false;
-            });
-            card.addEventListener('mouseleave', () => {
-                viewBtn.hidden = true;
-            });
-            viewBtn.addEventListener('click', (e) => {
-                e.stopPropagation();
-                if (!isOpenModal) {
-                    showCocktailDetails(viewBtn.dataset.id);
-                    isOpenModal = true;
-                }
-            });
-        } else {
-            card.addEventListener('click', () => {
-                if (!isOpenModal) {
-                    showCocktailDetails(cocktail.idDrink);
-                    isOpenModal = true;
-                }
-            });
-            viewBtn.remove();
-        }
+        
+        card.addEventListener('click', () => {
+            if (!isOpenModal) {
+                showCocktailDetails(cocktail.idDrink);
+                isOpenModal = true;
+            }
+        });
 
         cocktailList.appendChild(card);
     });
@@ -109,7 +88,7 @@ function generateModalContent(cocktail) {
     return `
         <div class="cocktail-modal-content">
             <h2>${cocktail.strDrink}</h2>
-            <span class="close-modal">&times;</span>
+            <span class="close-modal"><strong>&times;</strong></span>
             <div class="cocktail-main-info">
                 <img src="${cocktail.strDrinkThumb}/medium" alt="${cocktail.strDrink}">
                 <div class="cocktail-text-info">

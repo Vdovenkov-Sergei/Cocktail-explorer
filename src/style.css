@@ -43,10 +43,15 @@ header {
     box-shadow: 0 2px 8px rgba(0,0,0,0.15);
 }
 
+header h1 {
+    font-size: 24px;
+}
+
 .idle-box {
     display: flex;
     flex-direction: column;
     align-items: center;
+    text-align: center;
     color: var(--primary);
     font-weight: 500;
     font-size: 18px;
@@ -61,6 +66,8 @@ header {
 .idle-box img {
     border-radius: 12px;
     margin: 0;
+    width: 70%;
+    height: 70%;
 }
 
 .search-bar {
@@ -87,7 +94,7 @@ header {
 }
 
 #search-input {
-    width: clamp(240px, 50%, 420px);
+    width: 50%;
     border: 2px solid #ccc;
 }
 
@@ -95,6 +102,11 @@ header {
     border-color: var(--accent);
     box-shadow: 0 0 6px rgba(243, 156, 18, 0.5);
     outline: none;
+}
+
+#result-count {
+    font-size: 16px;
+    color: white;
 }
 
 .btn {
@@ -130,6 +142,7 @@ header {
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
     transition: transform 0.2s ease;
     position: relative;
+    cursor: pointer;
 }
 
 .cocktail-card:hover {
@@ -156,39 +169,13 @@ header {
     margin: 0;
 }
 
-.view-details-btn {
-    position: absolute;
-    top: 16px;
-    left: 50%;
-    transform: translateX(-50%) translateY(-10px);
-    padding: 8px 12px;
-    background-color: var(--accent);
-    color: white;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 14px;
-    opacity: 0;
-    pointer-events: none;
-    transition: all 0.3s ease;
-}
-
-.cocktail-card:hover .view-details-btn {
-    opacity: 1;
-    transform: translateX(-50%) translateY(0);
-    pointer-events: auto;
-}
-
-.view-details-btn:hover {
-    background-color: var(--accent-dark);
-}
-
 .cocktail-modal {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
+    padding: 0;
     background: rgba(0, 0, 0, 0.5);
     display: flex;
     justify-content: center;
@@ -206,8 +193,9 @@ header {
     position: relative;
     background: #ffffff;
     padding: 25px;
-    border-radius: 14px;
     width: 80%;
+    max-height: 68vh;
+    overflow-y: auto;
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
     animation: slideUp 0.3s ease;
     display: flex;
@@ -281,7 +269,7 @@ footer {
     padding: 12px;
     text-align: center;
     color: white;
-    font-size: 14px;
+    font-size: 16px;
     border-top: 2px solid var(--accent);
     border-top-left-radius: 10px;
     border-top-right-radius: 10px;
@@ -300,4 +288,113 @@ footer a:hover {
 footer i {
     margin-left: 6px;
     color: var(--accent-dark);
+}
+
+
+/* Мобильные устройства */
+@media (max-width: 768px) {
+    header {
+        padding: 10px 5px;
+    }
+
+    header h1 {
+        font-size: 20px;
+    }
+
+    .idle-box {
+        font-size: 12px;
+    }
+
+    .idle-box img {
+        width: 100%;
+        height: auto;
+    }
+
+    .search-bar {
+        flex-direction: column;
+        align-items: center;
+        gap: 12px;
+        margin-top: 8px;
+    }
+
+    .search-actions {
+        flex-direction: row;
+        gap: 8px;
+    }
+
+    #search-input, #search-btn, #clear-btn {
+        font-size: 12px;
+        padding: 8px 12px;
+    }
+
+    #search-input {
+        width: 80%;
+    }
+
+    #result-count {
+        font-size: 12px;
+    }
+
+    .cocktail-list {
+        margin: 10px;
+        gap: 12px;
+    }
+
+    .cocktail-card {
+        width: 140px;
+        padding: 12px;
+    }
+
+    .cocktail-card img {
+        height: 120px;
+    }
+
+    .cocktail-card h3 {
+        font-size: 14px;
+    }
+
+    .cocktail-card p {
+        font-size: 12px;
+    }
+
+    .cocktail-modal-content {
+        padding: 12px;
+        width: 90%;
+        max-height: 80vh;
+        gap: 15px;
+    }
+
+    .cocktail-modal-content h2 {
+        font-size: 18px;
+    }
+
+    .close-modal {
+        font-size: 30px;
+        top: 0px;
+        right: 15px;
+    }
+
+    .cocktail-main-info {
+        flex-direction: column;
+        align-items: center;
+        gap: 18px;
+    }
+
+    .cocktail-main-info img {
+        width: 200px;
+        height: 200px;
+    }
+
+    .cocktail-text-info {
+        gap: 8px;
+    }
+
+    .cocktail-text-info p {
+        font-size: 13px;
+    }
+
+    footer {
+        padding: 8px;
+        font-size: 12px;
+    }
 }
