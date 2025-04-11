@@ -3,6 +3,7 @@ const searchInput = document.getElementById('search-input');
 const searchButton = document.getElementById('search-btn');
 const clearButton = document.getElementById('clear-btn');
 const resultCount = document.getElementById('result-count');
+const idleAnimation = document.getElementById('idle-animation');
 
 const API_URL = 'https://www.thecocktaildb.com/api/json/v1/1/';
 
@@ -26,12 +27,14 @@ async function fetchCocktails() {
     } else {
         resultCount.textContent = 'No cocktails found.';
         cocktailList.innerHTML = '';
+        showIdleAnimation(true);
     }
 }
 
 function displayCocktails(cocktails) {
     cocktailList.innerHTML = '';
     resultCount.textContent = `${cocktails.length} cocktails found.`;
+    showIdleAnimation(false);
 
     const isMobile = window.innerWidth <= 768;
     cocktails.forEach(cocktail => {
@@ -42,7 +45,7 @@ function displayCocktails(cocktails) {
             <img src="${cocktail.strDrinkThumb}/small" alt="${cocktail.strDrink}">
             <h3>${cocktail.strDrink}</h3>
             <p>${cocktail.strCategory}</p>
-            <button class="view-details-btn" data-id="${cocktail.idDrink}" hidden>View Details</button>
+            <button class="view-details-btn" data-id="${cocktail.idDrink}" hidden>View More</button>
         `;
 
         const viewBtn = card.querySelector('.view-details-btn');
@@ -104,16 +107,18 @@ async function showCocktailDetails(id) {
 
 function generateModalContent(cocktail) {
     return `
-        <h2>${cocktail.strDrink}</h2>
-        <span class="close-modal">&times;</span>
-        <div class="cocktail-main-info">
-            <img src="${cocktail.strDrinkThumb}/medium" alt="${cocktail.strDrink}">
-            <div class="cocktail-text-info">
-                <p><strong>Category:</strong> ${cocktail.strCategory}, ${cocktail.strAlcoholic}</p>
-                <p><strong>Glass:</strong> ${cocktail.strGlass}</p>
-                <p><strong>Instructions:</strong> ${cocktail.strInstructions}</p>
-                <p><strong>Ingredients:</strong></p>
-                ${getIngredients(cocktail)}
+        <div class="cocktail-modal-content">
+            <h2>${cocktail.strDrink}</h2>
+            <span class="close-modal">&times;</span>
+            <div class="cocktail-main-info">
+                <img src="${cocktail.strDrinkThumb}/medium" alt="${cocktail.strDrink}">
+                <div class="cocktail-text-info">
+                    <p><strong>Category:</strong> ${cocktail.strCategory}, ${cocktail.strAlcoholic}</p>
+                    <p><strong>Glass:</strong> ${cocktail.strGlass}</p>
+                    <p><strong>Instructions:</strong> ${cocktail.strInstructions}</p>
+                    <p><strong>Ingredients:</strong></p>
+                    ${getIngredients(cocktail)}
+                </div>
             </div>
         </div>
     `;
@@ -136,11 +141,20 @@ function getIngredients(cocktail) {
     return '<ul class="ingredient-list">' + ingredientsList.join('') + '</ul>';
 }
 
+function showIdleAnimation(show) {
+    if (show) {
+        idleAnimation.style.display = 'flex';
+    } else {
+        idleAnimation.style.display = 'none';
+    }
+}
+
 searchButton.addEventListener('click', fetchCocktails);
 clearButton.addEventListener('click', () => {
     searchInput.value = '';
     resultCount.textContent = 'Ready to search...';
     cocktailList.innerHTML = '';
+    showIdleAnimation(true);
 });
 searchInput.addEventListener('keypress', (e) => {
 	if (e.key === 'Enter') {
