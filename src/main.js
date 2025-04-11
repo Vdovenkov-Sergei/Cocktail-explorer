@@ -1,5 +1,5 @@
 const cocktailList = document.querySelector('.cocktail-list');
-const searchInput = document.getElementById('search');
+const searchInput = document.getElementById('search-input');
 const searchButton = document.getElementById('search-btn');
 const clearButton = document.getElementById('clear-btn');
 const resultCount = document.getElementById('result-count');
@@ -16,13 +16,13 @@ async function fetchCocktails() {
         return alert("Please enter cocktail name.");
     }
 
-    const searchQuery = `&s=${cocktailName}`;
-    const url = `${API_URL}search.php?${searchQuery}`;
+    const url = `${API_URL}search.php?&s=${cocktailName}`;
     const response = await fetch(url);
     const data = await response.json();
 
     if (data.drinks) {
         displayCocktails(data.drinks);
+        searchInput.blur();
     } else {
         resultCount.textContent = 'No cocktails found.';
         cocktailList.innerHTML = '';
@@ -33,20 +33,44 @@ function displayCocktails(cocktails) {
     cocktailList.innerHTML = '';
     resultCount.textContent = `${cocktails.length} cocktails found.`;
 
+    const isMobile = window.innerWidth <= 768;
     cocktails.forEach(cocktail => {
         const card = document.createElement('article');
         card.classList.add('cocktail-card');
+
         card.innerHTML = `
             <img src="${cocktail.strDrinkThumb}/small" alt="${cocktail.strDrink}">
             <h3>${cocktail.strDrink}</h3>
             <p>${cocktail.strCategory}</p>
+            <button class="view-details-btn" data-id="${cocktail.idDrink}" hidden>View Details</button>
         `;
-        card.addEventListener('click', () => {
-            if (!isOpenModal) {
-                showCocktailDetails(cocktail.idDrink);
-                isOpenModal = true;
-            }
-        });
+
+        const viewBtn = card.querySelector('.view-details-btn');
+
+        if (!isMobile) {
+            card.addEventListener('mouseenter', () => {
+                viewBtn.hidden = false;
+            });
+            card.addEventListener('mouseleave', () => {
+                viewBtn.hidden = true;
+            });
+            viewBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                if (!isOpenModal) {
+                    showCocktailDetails(viewBtn.dataset.id);
+                    isOpenModal = true;
+                }
+            });
+        } else {
+            card.addEventListener('click', () => {
+                if (!isOpenModal) {
+                    showCocktailDetails(cocktail.idDrink);
+                    isOpenModal = true;
+                }
+            });
+            viewBtn.remove();
+        }
+
         cocktailList.appendChild(card);
     });
 }
@@ -58,8 +82,7 @@ async function showCocktailDetails(id) {
 
     if (data.drinks) {
         const cocktail = data.drinks[0];
-
-        const modal = document.createElement('div');
+        const modal = document.createElement('dialog');
         modal.classList.add('cocktail-modal');
         modal.innerHTML = generateModalContent(cocktail);
 
@@ -81,18 +104,16 @@ async function showCocktailDetails(id) {
 
 function generateModalContent(cocktail) {
     return `
-        <div class="cocktail-modal-content">
-            <span class="close-modal">&times;</span>
-            <h2>${cocktail.strDrink}</h2>
-            <div class="cocktail-img-info">
-                <img src="${cocktail.strDrinkThumb}/medium" alt="${cocktail.strDrink}">
-                <div class="cocktail-info">
-                    <p><strong>Category:</strong> ${cocktail.strCategory}, ${cocktail.strAlcoholic}</p>
-                    <p><strong>Glass:</strong> ${cocktail.strGlass}</p>
-                    <p><strong>Instructions:</strong> ${cocktail.strInstructions}</p>
-                    <p><strong>Ingredients:</strong></p>
-                    ${getIngredients(cocktail)}
-                </div>
+        <h2>${cocktail.strDrink}</h2>
+        <span class="close-modal">&times;</span>
+        <div class="cocktail-main-info">
+            <img src="${cocktail.strDrinkThumb}/medium" alt="${cocktail.strDrink}">
+            <div class="cocktail-text-info">
+                <p><strong>Category:</strong> ${cocktail.strCategory}, ${cocktail.strAlcoholic}</p>
+                <p><strong>Glass:</strong> ${cocktail.strGlass}</p>
+                <p><strong>Instructions:</strong> ${cocktail.strInstructions}</p>
+                <p><strong>Ingredients:</strong></p>
+                ${getIngredients(cocktail)}
             </div>
         </div>
     `;

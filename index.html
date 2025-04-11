@@ -5,21 +5,27 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cocktail Explorer</title>
     <link rel="stylesheet" href="src/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link rel="icon" href="/cocktail.ico" type="image/x-icon">
     <script type="module" src="src/main.js" defer></script>
 </head>
 <body>
     <header>
-        <h1>Explore Cocktails</h1>
-        <div class="input-area"> 
-            <input type="text" id="search" placeholder="Enter cocktail name">
-            <button id="search-btn">Search</button>
-            <button id="clear-btn">Clear</button>
+        <h1><i class="fas fa-glass-martini-alt"></i> Explore Cocktails</h1>
+        <div class="search-bar">
+            <input type="text" placeholder="Enter cocktail name" id="search-input">
+            <div class="search-actions">
+                <button id="search-btn" class="btn"><i class="fas fa-search"></i> Search</button>
+                <button id="clear-btn" class="btn"><i class="fas fa-times"></i> Clear</button>
+            </div>
         </div>
         <p id="result-count">Ready to search...</p>
     </header>
     <main>
         <div class="cocktail-list"></div>
     </main>
+    <footer>
+        <p>Powered by <a href="https://www.thecocktaildb.com/" target="_blank">TheCocktailDB</a><i class="fas fa-cocktail"></i></p>
+    </footer>
 </body>
 </html>
