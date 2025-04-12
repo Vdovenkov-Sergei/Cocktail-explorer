@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cocktail Explorer</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="icon" href="/Cocktail-explorer/cocktail.ico" type="image/x-icon">
+  <script type="module" crossorigin src="/Cocktail-explorer/assets/index-Cu2QpsUS.js"></script>
+  <link rel="stylesheet" crossorigin href="/Cocktail-explorer/assets/index-C4XLZKuX.css">
+</head>
+<body>
+    <header>
+        <h1><i class="fas fa-glass-martini-alt"></i> Explore Cocktails</h1>
+        <div class="search-bar">
+            <div class="input-wrapper">
+                <input type="text" placeholder="Enter cocktail name" id="search-input">
+                <span id="clear-icon"><i class="fas fa-times"></i></span>
+            </div>
+            <button id="search-btn" disabled><i class="fas fa-search"></i> Search</button>
+        </div>
+        <p id="result-count">Ready to search...</p>
+    </header>
+    <main>
+        <div id="idle-animation" class="idle-box">
+            <img src="https://st.peopletalk.ru/wp-content/uploads/2016/12/1481629901.gif" alt="Shaking Cocktail">
+            <p>Shake it up... waiting for your next cocktail...</p>
+        </div>
+        <div class="cocktail-list"></div>
+    </main>
+    <footer>
+        <p>Powered by <a href="https://www.thecocktaildb.com/" target="_blank">TheCocktailDB</a><i class="fas fa-cocktail"></i></p>
+    </footer>
+</body>
+</html>
