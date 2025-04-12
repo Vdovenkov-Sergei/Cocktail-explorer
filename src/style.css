@@ -46,6 +46,10 @@ header h1 {
     font-size: 24px;
 }
 
+header h1 i {
+    color: var(--accent);
+}
+
 .idle-box {
     display: flex;
     flex-direction: column;
@@ -62,7 +66,7 @@ header h1 {
 .idle-box img {
     border-radius: 12px;
     margin-top: 30px;
-    width: 40%;
+    width: 60%;
     object-fit: cover;
 }
 
@@ -70,28 +74,56 @@ header h1 {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    gap: 16px;
+    gap: 14px;
     margin-top: 12px;
 }
 
-.search-actions {
-    display: flex;
-    gap: 12px;
-    flex-wrap: wrap;
+.input-wrapper {
+    position: relative;
+    width: 50%;
 }
 
-#search-input, #search-btn, #clear-btn {
+#search-input, #search-btn {
     padding: 10px 16px;
     border-radius: 10px;
     border: none;
     font-size: 16px;
     transition: all 0.2s ease;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
 #search-input {
-    width: 50%;
+    width: 100%;
+    padding-right: 32px;
+    box-sizing: border-box;
     border: 2px solid #ccc;
+}
+
+#search-btn {
+    background-color: var(--accent);
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-weight: 500;
+}
+
+#search-btn:disabled {
+    background-color: #ccc;
+    color: #666;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+#clear-icon {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 16px;
+    color: var(--gray);
+    cursor: pointer;
+    display: none;
+    user-select: none;
 }
 
 #search-input:focus {
@@ -103,14 +135,6 @@ header h1 {
 #result-count {
     font-size: 16px;
     color: white;
-}
-
-.btn {
-    background-color: var(--accent);
-    color: white;
-    border: none;
-    cursor: pointer;
-    font-weight: 500;
 }
 
 .cocktail-list {
@@ -170,6 +194,7 @@ header h1 {
     align-items: center;
     z-index: 1000;
     animation: fadeIn 0.3s ease;
+    cursor: pointer;
 }
 
 @keyframes fadeIn {
@@ -178,7 +203,6 @@ header h1 {
 }
 
 .cocktail-modal-content {
-    position: relative;
     background: #ffffff;
     padding: 25px;
     width: 80%;
@@ -189,6 +213,7 @@ header h1 {
     display: flex;
     flex-direction: column;
     gap: 20px;
+    cursor: default;
 }
 
 @keyframes slideUp {
@@ -200,15 +225,6 @@ header h1 {
     margin: 0;
     text-align: center;
     color: var(--primary);
-}
-
-.close-modal {
-    position: absolute;
-    top: 5px;
-    right: 20px;
-    font-size: 40px;
-    cursor: pointer;
-    color: #e74c3c;
 }
 
 .cocktail-main-info {
@@ -286,24 +302,22 @@ footer i {
     }
 
     .search-bar {
-        flex-direction: column;
-        align-items: center;
         gap: 12px;
         margin-top: 8px;
     }
 
-    .search-actions {
-        flex-direction: row;
-        gap: 8px;
-    }
-
-    #search-input, #search-btn, #clear-btn {
+    #search-input, #search-btn {
         font-size: 12px;
         padding: 8px 12px;
     }
 
     #search-input {
-        width: 80%;
+        padding-right: 28px;
+    }
+
+    #clear-icon {
+        right: 10px;
+        font-size: 14px;
     }
 
     #result-count {
@@ -343,12 +357,6 @@ footer i {
         font-size: 18px;
     }
 
-    .close-modal {
-        font-size: 30px;
-        top: 0px;
-        right: 15px;
-    }
-
     .cocktail-main-info {
         flex-direction: column;
         align-items: center;
@@ -376,16 +384,16 @@ footer i {
 
 /* Hover effects */
 @media (hover: hover) {
-    .btn:hover {
+    #search-btn:hover {
         background-color: var(--accent-dark);
+    }
+
+    #clear-icon:hover {
+        color: var(--accent-dark);
     }
 
     .cocktail-card:hover {
         transform: scale(1.03);
-    }
-
-    .close-modal:hover {
-        color: #c0392b;
     }
 
     footer a:hover {

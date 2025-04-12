@@ -13,11 +13,11 @@
     <header>
         <h1><i class="fas fa-glass-martini-alt"></i> Explore Cocktails</h1>
         <div class="search-bar">
-            <input type="text" placeholder="Enter cocktail name" id="search-input">
-            <div class="search-actions">
-                <button id="search-btn" class="btn"><i class="fas fa-search"></i> Search</button>
-                <button id="clear-btn" class="btn"><i class="fas fa-times"></i> Clear</button>
+            <div class="input-wrapper">
+                <input type="text" placeholder="Enter cocktail name" id="search-input">
+                <span id="clear-icon"><i class="fas fa-times"></i></span>
             </div>
+            <button id="search-btn" disabled><i class="fas fa-search"></i> Search</button>
         </div>
         <p id="result-count">Ready to search...</p>
     </header>

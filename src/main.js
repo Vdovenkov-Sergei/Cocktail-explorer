@@ -1,7 +1,7 @@
 const cocktailList = document.querySelector('.cocktail-list');
 const searchInput = document.querySelector('#search-input');
 const searchButton = document.querySelector('#search-btn');
-const clearButton = document.querySelector('#clear-btn');
+const clearIcon = document.querySelector('#clear-icon');
 const resultCount = document.querySelector('#result-count');
 const idleAnimation = document.querySelector('#idle-animation');
 
@@ -11,23 +11,30 @@ let isOpenModal = false;
 
 async function fetchCocktails() {
     const cocktailName = searchInput.value.trim();
+    if (cocktailName) {
+        const url = `${API_URL}search.php?&s=${cocktailName}`;
+        try {
+            const response = await fetch(url);
+            if (!response.ok) {
+                throw new Error(`Failed to fetch cocktails using ${cocktailName}`)
+            }
+            const data = await response.json();
+            sessionStorage.setItem('lastSearch', cocktailName);
 
-	if (!cocktailName) {
-		searchInput.value = '';
-        return alert("Please enter cocktail name.");
-    }
-
-    const url = `${API_URL}search.php?&s=${cocktailName}`;
-    const response = await fetch(url);
-    const data = await response.json();
-
-    if (data.drinks) {
-        displayCocktails(data.drinks);
-        searchInput.blur();
-    } else {
-        resultCount.textContent = 'No cocktails found.';
-        cocktailList.innerHTML = '';
-        showIdleAnimation(true);
+            if (data.drinks) {
+                displayCocktails(data.drinks);
+                searchInput.blur();
+            } else {
+                resultCount.textContent = 'No cocktails found.';
+                cocktailList.innerHTML = '';
+                showIdleAnimation(true);
+            }
+        } catch (error) {
+            resultCount.textContent = 'Something went wrong. Try again later.';
+            console.error('Error fetching cocktails:', error);
+            cocktailList.innerHTML = '';
+            showIdleAnimation(true);
+        }
     }
 }
 
@@ -59,28 +66,30 @@ function displayCocktails(cocktails) {
 
 async function showCocktailDetails(id) {
     const url = `${API_URL}lookup.php?i=${id}`;
-    const response = await fetch(url);
-    const data = await response.json();
+    try {
+        const response = await fetch(url);
+        if (!response.ok) {
+            throw new Error(`Failed to fetch details for cocktail with id ${id}`);
+        }
 
-    if (data.drinks) {
-        const cocktail = data.drinks[0];
-        const modal = document.createElement('dialog');
-        modal.classList.add('cocktail-modal');
-        modal.innerHTML = generateModalContent(cocktail);
-
-        modal.querySelector('.close-modal').addEventListener('click', () => {
-            modal.remove();
-            isOpenModal = false;
-		});
-		
-		modal.addEventListener('click', (e) => {
-            if (e.target === modal) {
-                modal.remove();
-                isOpenModal = false;
-            }
-        });
-
-        document.body.appendChild(modal);
+        const data = await response.json();
+        if (data.drinks) {
+            const cocktail = data.drinks[0];
+            const modal = document.createElement('dialog');
+            modal.classList.add('cocktail-modal');
+            modal.innerHTML = generateModalContent(cocktail);
+            
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    modal.remove();
+                    isOpenModal = false;
+                }
+            });
+            document.body.appendChild(modal);
+        }
+    } catch (error) {
+        console.error('Error fetching cocktail details:', error);
+        resultCount.textContent = 'Something went wrong. Please try again later.';
     }
 }
 
@@ -88,7 +97,6 @@ function generateModalContent(cocktail) {
     return `
         <div class="cocktail-modal-content">
             <h2>${cocktail.strDrink}</h2>
-            <span class="close-modal"><strong>&times;</strong></span>
             <div class="cocktail-main-info">
                 <img src="${cocktail.strDrinkThumb}/medium" alt="${cocktail.strDrink}">
                 <div class="cocktail-text-info">
@@ -128,15 +136,40 @@ function showIdleAnimation(show) {
     }
 }
 
+function updateSearchButtonState() {
+    const trimmedValue = searchInput.value.trim();
+    searchButton.disabled = trimmedValue === '';
+}
+
 searchButton.addEventListener('click', fetchCocktails);
-clearButton.addEventListener('click', () => {
+searchInput.addEventListener('input', () => {
+    clearIcon.style.display = searchInput.value ? 'block' : 'none';
+    updateSearchButtonState();
+});
+clearIcon.addEventListener('click', () => {
     searchInput.value = '';
-    resultCount.textContent = 'Ready to search...';
-    cocktailList.innerHTML = '';
-    showIdleAnimation(true);
+    clearIcon.style.display = 'none';
+    searchButton.disabled = true;
+    searchInput.focus();
+    clearIcon.blur();
 });
 searchInput.addEventListener('keypress', (e) => {
-	if (e.key === 'Enter') {
+	if (e.key === 'Enter' && searchInput.value.trim()) {
 		fetchCocktails();
 	}
 });
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && isOpenModal) {
+        const modal = document.querySelector('.cocktail-modal');
+        modal?.remove();
+        isOpenModal = false;
+    }
+});
+
+const lastSearch = sessionStorage.getItem('lastSearch');
+if (lastSearch) {
+    searchInput.value = lastSearch;
+    clearIcon.style.display = 'block';
+    searchButton.disabled = false;
+    fetchCocktails();
+}
