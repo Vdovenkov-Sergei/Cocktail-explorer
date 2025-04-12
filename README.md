@@ -1,3 +1,3 @@
 # Web-page
 
-<img src="public/preview.png">
+<img src="images/preview.png">
